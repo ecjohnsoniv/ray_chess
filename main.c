@@ -6,7 +6,7 @@
 /*
     Asthetic variables
 */
-#define SQ_SIZE 40
+#define SQ_SIZE 100
 #define BD_SIZE (SQ_SIZE * 8)
 
 /*
@@ -14,6 +14,9 @@
     unlikly to change... for NOW.
 */
 #define NUM_CHESS_PIECE (16 + 16)
+
+
+
 
 typedef struct{
     char type;  //K for king, Q for queen, R for rook, B for bishop, and N for knight, _ for pawn
@@ -86,21 +89,21 @@ Piece* get_pieces()
     int rook_offset    = 0;
 
 
-    // Kings
+    // Kings (0-1)
     Piece w_King = {'K', 'w', king_offset, 0};
     chess_set[0] = w_King;
 
     Piece b_King = {'K', 'b', king_offset, 7}; 
     chess_set[1] = b_King;
 
-    // Queens
+    // Queens (2-3)
     Piece w_Queen = {'Q', 'w', queen_offset, 0};
     chess_set[2] = w_Queen;
       
     Piece b_Queen = {'Q', 'b', queen_offset, 7};
     chess_set[3] = b_Queen;
     
-    // Bishops
+    // Bishops (4-7)
     Piece wr_Bishop = {'B', 'w', (7 - bishop_offset), 0};
     chess_set[4] = wr_Bishop;
 
@@ -113,7 +116,7 @@ Piece* get_pieces()
     Piece bl_Bishop = {'B', 'b', (0 + bishop_offset), 7};
     chess_set[7] = bl_Bishop;
 
-    // kNights
+    // kNights (8-11)
     Piece wr_Knight = {'N', 'w', (7 - knight_offset), 0};
     chess_set[8] = wr_Knight;
 
@@ -126,7 +129,7 @@ Piece* get_pieces()
     Piece bl_Knight = {'B', 'b', (0 + knight_offset), 7};
     chess_set[11] = bl_Knight;
 
-    // Rooks
+    // Rooks(12-15)
     Piece wr_Rook = {'R', 'w', (7 - rook_offset), 0};
     chess_set[12] = wr_Rook;
 
@@ -139,14 +142,14 @@ Piece* get_pieces()
     Piece bl_Rook = {'R', 'b', (0 + rook_offset), 7};
     chess_set[15] = bl_Rook;
     
-    // White's Pawns
+    // White's Pawns (16-23)
     for (int i = 16; i < (16 + 8); i++)
     {
         Piece pawn = {'P', 'w', (i - 16), 1};
         chess_set[i] = pawn;
     }
 
-    // Black's Pawns
+    // Black's Pawns (24-32)
     for (int i = 24; i < (24 + 8); i++)
     {
         Piece pawn = {'P', 'b', (i - 24), 6};
@@ -173,7 +176,7 @@ void chess_board(Color white, Color black, Piece* chess_set)
 
                 for (int i = 0; i < NUM_CHESS_PIECE; i++)
                 {
-                    if (chess_set[i].x == x && chess_set[i].y == y)
+                    if (chess_set[i].x == x && chess_set[i].y == y && chess_set[i].dead == false)
 				        DrawText(
                             TextFormat("%c", chess_set[i].type), // TextFormat converts char into string for the fx
                             x * SQ_SIZE, 
