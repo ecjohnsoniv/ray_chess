@@ -48,12 +48,14 @@ int main(void)
     
 	// Initialize the window and background colour
 	InitWindow(BD_SIZE, BD_SIZE, "Chess game");
-	// SetConfigFlags(FLAG_VSYNC_HINT);
-	SetTargetFPS(1);
+	SetConfigFlags(FLAG_VSYNC_HINT);
+	//SetTargetFPS(60);
 	//SetBackgroundColor(BLACK);
 	ClearBackground(PINK);
  
     Piece* current_board = get_pieces();
+    
+    static double lastPressTime = 0; 
 
 	while (!WindowShouldClose())
 	{
@@ -64,6 +66,18 @@ int main(void)
 		chess_board(BEIGE, BROWN, current_board);
 		// DrawText(w_pawn.sym, 0, 0, 100, BLACK);
         // DrawFPS(0,0);
+
+
+        if (IsKeyDown(KEY_P) && (GetTime() - lastPressTime > .25))
+        {
+            current_board[20].y += 1;
+            if (current_board[20].y > 5)
+            {
+                current_board[20].y = 1;
+            }
+            lastPressTime = GetTime();
+        } 
+        //current_board[20].x -= 1;
 
 
 
