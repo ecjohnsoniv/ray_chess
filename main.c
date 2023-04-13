@@ -6,7 +6,7 @@
 /*
     Asthetic variables
 */
-#define SQ_SIZE 100
+#define SQ_SIZE 80
 #define BUMPER_OFFSET (SQ_SIZE / 4)
 #define BD_SIZE_X ((BUMPER_OFFSET * 2) + (SQ_SIZE * 8))
 #define BD_SIZE_Y (SQ_SIZE * 8)
@@ -204,8 +204,7 @@ void chess_board(Color white, Color black, Piece* chess_set)
                 for (int i = 0; i < NUM_CHESS_PIECE; i++)
                 {
                     if (chess_set[i].x == x && chess_set[i].y == y && chess_set[i].dead == false)
-                    {
-                        
+                    { 
                         float selector_multiple = 0.8; 
                         int selector_square     = SQ_SIZE * selector_multiple;
                         int selector_margin     = SQ_SIZE * ((1 - selector_multiple)/2);
@@ -222,7 +221,7 @@ void chess_board(Color white, Color black, Piece* chess_set)
                             TextFormat("%c", chess_set[i].type),                // TextFormat converts char into string for the fx
                             x * SQ_SIZE + (.1) * SQ_SIZE + BUMPER_OFFSET, 
                             y * SQ_SIZE + (.1) * SQ_SIZE, 
-                            SQ_SIZE, 
+                            (3 * SQ_SIZE / 4), 
                             colorer(chess_set[i].color)
                         );
                     }
