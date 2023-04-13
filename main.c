@@ -7,7 +7,10 @@
     Asthetic variables
 */
 #define SQ_SIZE 100
-#define BD_SIZE (SQ_SIZE * 8)
+#define BUMPER_OFFSET (SQ_SIZE / 4)
+#define BD_SIZE_X ((BUMPER_OFFSET * 2) + (SQ_SIZE * 8))
+#define BD_SIZE_Y (SQ_SIZE * 8)
+#define TRANSPARENT_GREEN (Color){ 0, 228, 48, 255/2 } 
 
 /*
     Variables for the Rules of Chess
@@ -47,7 +50,7 @@ int main(void)
 {
     
 	// Initialize the window and background colour
-	InitWindow(BD_SIZE, BD_SIZE, "Chess game");
+	InitWindow(BD_SIZE_X, BD_SIZE_Y, "Chess game");
 	SetConfigFlags(FLAG_VSYNC_HINT);
 	//SetTargetFPS(60);
 	//SetBackgroundColor(BLACK);
@@ -56,7 +59,8 @@ int main(void)
     Piece* current_board = get_pieces();
     
     static double lastPressTime = 0; 
-
+    bool white_turn = true;
+    
 	while (!WindowShouldClose())
 	{
         
@@ -66,7 +70,15 @@ int main(void)
 		chess_board(BEIGE, BROWN, current_board);
 		// DrawText(w_pawn.sym, 0, 0, 100, BLACK);
         // DrawFPS(0,0);
-
+        
+        if (white_turn == true)
+        {
+            DrawRectangle(0, 0, SQ_SIZE/4, BD_SIZE_Y, WHITE);          
+        }
+        else 
+        {
+            DrawRectangle(0, 0, SQ_SIZE/4, BD_SIZE_Y, BROWN);         
+        }
 
         if (IsKeyDown(KEY_P) && (GetTime() - lastPressTime > .25))
         {
@@ -74,6 +86,7 @@ int main(void)
             if (current_board[20].y > 5)
             {
                 current_board[20].y = 1;
+                white_turn = false;
             }
             lastPressTime = GetTime();
         } 
@@ -184,20 +197,36 @@ void chess_board(Color white, Color black, Piece* chess_set)
 			{
                 // these make the square black or white
 				if((y + x) % 2 == 0)
-					DrawRectangle(x * SQ_SIZE, y * SQ_SIZE, SQ_SIZE, SQ_SIZE, white);
+					DrawRectangle(BUMPER_OFFSET + x * SQ_SIZE, y * SQ_SIZE, SQ_SIZE, SQ_SIZE, white);
 				else
-					DrawRectangle(x * SQ_SIZE, y * SQ_SIZE , SQ_SIZE, SQ_SIZE, black);
+					DrawRectangle(BUMPER_OFFSET + x * SQ_SIZE, y * SQ_SIZE , SQ_SIZE, SQ_SIZE, black);
 
                 for (int i = 0; i < NUM_CHESS_PIECE; i++)
                 {
                     if (chess_set[i].x == x && chess_set[i].y == y && chess_set[i].dead == false)
+                    {
+                        
+                        float selector_multiple = 0.8; 
+                        int selector_square     = SQ_SIZE * selector_multiple;
+                        int selector_margin     = SQ_SIZE * ((1 - selector_multiple)/2);
+                        
+                        DrawRectangle(
+                            (x * SQ_SIZE) + selector_margin + BUMPER_OFFSET, 
+                            (y * SQ_SIZE) + selector_margin, 
+                            selector_square, 
+                            selector_square, 
+                            TRANSPARENT_GREEN
+                        ); 
+                    
 				        DrawText(
-                            TextFormat("%c", chess_set[i].type), // TextFormat converts char into string for the fx
-                            x * SQ_SIZE, 
-                            y * SQ_SIZE, 
+                            TextFormat("%c", chess_set[i].type),                // TextFormat converts char into string for the fx
+                            x * SQ_SIZE + (.1) * SQ_SIZE + BUMPER_OFFSET, 
+                            y * SQ_SIZE + (.1) * SQ_SIZE, 
                             SQ_SIZE, 
                             colorer(chess_set[i].color)
                         );
+                    }
+
                 }
 
 			}
